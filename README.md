@@ -67,3 +67,13 @@ export default tseslint.config([
   },
 ])
 ```
+## Deployment Steps
+
+### 1. Build your React + Vite project
+
+```bash
+npm run build
+cd..
+sudo rm -rf /var/www/mcxstudios24/*
+sudo cp -r /path/to/your-project/dist/* /var/www/mcxstudios24/
+
