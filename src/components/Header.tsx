@@ -9,7 +9,7 @@ const Header: React.FC = () => {
             <header className="w-120 flex flex-col sm:flex-row items-center justify-between p-4 bg-white bg-opacity-60 backdrop-blur-md shadow-md rounded-b-2xl">
                 <div className="flex items-center space-x-4">
                     <img
-                        src="src/assets/Logo.png" // Replace with your actual profile image path
+                        src="Logo.png"
                         alt="Profile"
                         className="w-14 h-14 rounded-full border border-gray-300 shadow-sm"
                     />

@@ -79,5 +79,5 @@ npm run build
 
 ```bash
 sudo rm -rf /var/www/mcxstudios24/*
-sudo cp -r /path/to/your-project/dist/* /var/www/mcxstudios24/
+sudo cp -r /MCX_Studios/dist/* /var/www/mcxstudios24/
 ```
