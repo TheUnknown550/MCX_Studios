@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSortedGames } from "./hooks/useSortedGames";
 import Tabs from "./components/Tabs";
 import GameCard from "./components/GameCard";
