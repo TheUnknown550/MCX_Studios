@@ -75,9 +75,15 @@ export default tseslint.config([
 npm run build
 ```
 
-### 2. Deploy with NGINX
+### 2. Deploy with NGINX in root
 
 ```bash
 sudo rm -rf /var/www/mcxstudios24/*
 sudo cp -r MCX_Studios/dist/* /var/www/mcxstudios24/
+```
+### 2. Deploy with NGINX in MCX_Studios
+
+```bash
+sudo rm -rf /var/www/mcxstudios24/*
+sudo cp -r dist/* /var/www/mcxstudios24/
 ```
