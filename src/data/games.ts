@@ -24,7 +24,7 @@ export const games: GameEntry[] = [
     id: 2,
     title: "Higher Heights",
     description: "How high can you go?",
-    imageUrl: "https://tr.rbxcdn.com/180DAY-a50eb7ef3f7a1378d28a3e7c571fb860/150/150/Place/Webp/noFilter",
+    imageUrl: "https://tr.rbxcdn.com/180DAY-d14ffe54f0f4e7a04eb780e4ff948fd4/150/150/Image/Webp/noFilter",
     link: "https://www.roblox.com/games/84024545489993/Higher-Heights",
     universeId: 8194190200,
     createdAt: "2025-07-22T12:00:00Z",
