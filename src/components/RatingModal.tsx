@@ -13,9 +13,11 @@ interface RatingModalProps {
 const RatingModal: React.FC<RatingModalProps> = ({ 
   isOpen, 
   onClose, 
-  gameTitle
+  gameTitle,
+  gameId,
+  currentRating = 0
 }) => {
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(currentRating);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewComment, setReviewComment] = useState('');
@@ -46,6 +48,15 @@ const RatingModal: React.FC<RatingModalProps> = ({
     }
 
     // Simulate submitting the review
+    console.log('Rating submitted:', { 
+      gameId, 
+      gameTitle, 
+      rating, 
+      reviewTitle, 
+      reviewComment, 
+      username 
+    });
+    
     addNotification({
       type: 'success',
       title: 'Review Submitted!',

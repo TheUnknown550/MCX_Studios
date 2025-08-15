@@ -11,13 +11,16 @@ export type Review = {
   verified: boolean;
 };
 
+export type GamePlatform = 'roblox' | 'mobile' | 'pc' | 'web';
+
 export type GameEntry = {
   id: number;
   title: string;
   description: string;
   imageUrl: string;
   link: string;
-  universeId: number;
+  platform: GamePlatform;
+  universeId?: number; // Optional for non-Roblox games
   createdAt: string; // ISO date string
   visits?: number; // optional field for popularity
   genre?: string[];
@@ -27,6 +30,12 @@ export type GameEntry = {
   rating?: number; // Average rating
   totalRatings?: number;
   reviews?: Review[];
+  downloadUrl?: string; // For mobile games
+  storeLinks?: {
+    playStore?: string;
+    appStore?: string;
+    steam?: string;
+  };
 };
 
 export const games: GameEntry[] = [
@@ -36,6 +45,7 @@ export const games: GameEntry[] = [
     description: "🧠 BRAIN ROT OBBY - Can You Survive the Chaos? Navigate through mind-bending obstacles and prove your skills in this intense parkour challenge!",
     imageUrl: "https://tr.rbxcdn.com/180DAY-e1a8146f5ea1ba6768658e09dd27c4be/150/150/Image/Webp/noFilter",
     link: "https://www.roblox.com/games/118906484497652/Escape-The-Impossible-BRAIN-ROT-OBBY",
+    platform: "roblox",
     universeId: 7972259029,
     createdAt: "2025-01-07T09:00:00Z",
     visits: 1247,
@@ -90,6 +100,7 @@ export const games: GameEntry[] = [
     description: "How high can you go? Climb to incredible heights in this vertical climbing adventure. Test your endurance and reach for the sky!",
     imageUrl: "https://tr.rbxcdn.com/180DAY-d14ffe54f0f4e7a04eb780e4ff948fd4/150/150/Image/Webp/noFilter",
     link: "https://www.roblox.com/games/84024545489993/Higher-Heights",
+    platform: "roblox",
     universeId: 8194190200,
     createdAt: "2025-07-22T12:00:00Z",
     visits: 856,

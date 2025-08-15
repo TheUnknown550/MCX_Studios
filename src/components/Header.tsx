@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React, { useState, useEffect } from "react";
-import { FaYoutube, FaTiktok, FaGamepad, FaUsers, FaFire, FaChartLine } from "react-icons/fa";
+import { FaYoutube, FaTiktok, FaInstagram, FaGamepad, FaUsers, FaFire, FaChartLine } from "react-icons/fa";
 import { games } from "../data/games";
 import { useTheme } from "../contexts/ThemeContext";
 import AnalyticsDashboard from "./AnalyticsDashboard";
@@ -163,6 +163,20 @@ const Header: React.FC = () => {
                             >
                                 <FaTiktok className="w-4 h-4" />
                             </a>
+                            <a
+                                href="https://www.instagram.com/mcxstudios24/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => analytics.trackSocialClick('instagram')}
+                                className={`group p-2 rounded-full transition-all duration-300 transform hover:scale-110 ${
+                                    isDark 
+                                        ? 'bg-purple-500/20 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 text-purple-400 hover:text-white border border-purple-400/30' 
+                                        : 'bg-purple-500/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 text-purple-700 hover:text-white border border-purple-300'
+                                }`}
+                                title="Instagram"
+                            >
+                                <FaInstagram className="w-4 h-4" />
+                            </a>
                         </div>
                     </div>
 
@@ -256,6 +270,20 @@ const Header: React.FC = () => {
                                 title="TikTok"
                             >
                                 <FaTiktok className="w-5 h-5" />
+                            </a>
+                            <a
+                                href="https://www.instagram.com/mcxstudios24/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => analytics.trackSocialClick('instagram')}
+                                className={`group p-3 rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${
+                                    isDark 
+                                        ? 'bg-purple-500/20 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 text-purple-400 hover:text-white border border-purple-400/30' 
+                                        : 'bg-purple-500/10 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 text-purple-700 hover:text-white border border-purple-300'
+                                }`}
+                                title="Instagram"
+                            >
+                                <FaInstagram className="w-5 h-5" />
                             </a>
                         </div>
                     </div>

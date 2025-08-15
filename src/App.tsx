@@ -1,22 +1,23 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSortedGames } from "./hooks/useSortedGames";
 import { NotificationProvider } from "./components/NotificationSystem";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import LoadingScreen from "./components/LoadingScreen";
 import AnimatedBackground from "./components/AnimatedBackground";
 import SearchBar from "./components/SearchBar";
 import Tabs from "./components/Tabs";
+import type { TabOption, SortOption } from "./components/Tabs";
 import GameCard from "./components/GameCard";
 import ReviewsPage from "./components/ReviewsPage";
 import Header from "./components/Header";
 import ThemeToggle from "./components/ThemeToggle";
 import { analytics, initializeAnalytics } from "./utils/analytics";
+import { games } from "./data/games";
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<"recent" | "popular" | "recommended" | "reviews">("recent");
+  const [activeTab, setActiveTab] = useState<TabOption>("roblox");
+  const [sortBy, setSortBy] = useState<SortOption>("recent");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { mostRecent = [], mostPopular = [], recommended = [] } = useSortedGames();
   const { isDark } = useTheme(); // This will force re-render when theme changes
 
   // Initialize Google Analytics
@@ -25,7 +26,7 @@ function AppContent() {
   }, []);
 
   // Track tab changes
-  const handleTabChange = (tab: "recent" | "popular" | "recommended" | "reviews") => {
+  const handleTabChange = (tab: TabOption) => {
     setActiveTab(tab);
     analytics.trackTabChange(tab);
   };
@@ -40,41 +41,52 @@ function AppContent() {
   };
 
   // Filter games based on search query
-  const filterGames = (games: typeof mostRecent) => {
-    if (!searchQuery) return games;
-    return games.filter(game => 
+  const filterGames = (gamesArray: typeof games) => {
+    if (!searchQuery) return gamesArray;
+    return gamesArray.filter((game) => 
       game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       game.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      game.genre?.some(g => g.toLowerCase().includes(searchQuery.toLowerCase()))
+      game.genre?.some((g) => g.toLowerCase().includes(searchQuery.toLowerCase()))
     );
+  };
+
+  // Sort games based on selected option
+  const sortGames = (gamesArray: typeof games, sortOption: SortOption) => {
+    return [...gamesArray].sort((a, b) => {
+      switch (sortOption) {
+        case 'recent':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case 'popular':
+          return (b.visits || 0) - (a.visits || 0);
+        case 'rating':
+          return (b.rating || 0) - (a.rating || 0);
+        case 'alphabetical':
+          return a.title.localeCompare(b.title);
+        default:
+          return 0;
+      }
+    });
   };
 
   const gamesToShow = useMemo(() => {
     if (activeTab === 'reviews') return []; // Reviews will be handled by ReviewsPage
     
-    const games = {
-      recent: mostRecent,
-      popular: mostPopular,
-      recommended: recommended,
-    }[activeTab] || [];
+    let filteredGames = games;
+    if (activeTab === 'roblox') {
+      filteredGames = games.filter(game => game.platform === 'roblox');
+    } else if (activeTab === 'mobile') {
+      filteredGames = games.filter(game => game.platform === 'mobile');
+    }
 
-    return filterGames(games);
-  }, [activeTab, searchQuery, mostRecent, mostPopular, recommended]);
+    // Sort the filtered games
+    const sortedGames = sortGames(filteredGames, sortBy);
+    
+    // Apply search filter
+    return filterGames(sortedGames);
+  }, [activeTab, sortBy, searchQuery]);
 
   if (isLoading) {
     return <LoadingScreen onComplete={() => setIsLoading(false)} />;
-  }
-
-  if (!mostRecent.length && !mostPopular.length && !recommended.length) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 text-center text-gray-200 bg-gradient-to-tr from-purple-700 via-pink-600 to-red-500">
-        <div className="space-y-4">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent mx-auto"></div>
-          <p className="text-xl font-semibold">Loading amazing games...</p>
-          <p className="text-sm opacity-75">Preparing your gaming experience</p>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -87,32 +99,37 @@ function AppContent() {
       <AnimatedBackground />
       
       {/* Theme Toggle - Fixed Top Right */}
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
         <ThemeToggle />
       </div>
       
       {/* Main Content */}
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
         <Header />
         
         {/* Search Bar */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-6 sm:mt-8 flex justify-center">
           <SearchBar onSearch={handleSearch} />
         </div>
 
         {/* Navigation Tabs */}
-        <Tabs activeTab={activeTab} setActiveTab={handleTabChange} />
+        <Tabs 
+          activeTab={activeTab} 
+          setActiveTab={handleTabChange}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+        />
 
         {/* Content Area */}
         {activeTab === 'reviews' ? (
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <ReviewsPage />
           </div>
         ) : (
           <>
             {/* Results Info */}
-            <div className="mt-6 text-center">
-              <p className="text-gray-900 dark:text-gray-100 font-bold text-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-4 py-2 rounded-full inline-block">
+            <div className="mt-4 sm:mt-6 text-center px-2">
+              <p className="text-gray-900 dark:text-gray-100 font-bold text-sm sm:text-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full inline-block">
                 {searchQuery ? (
                   <>Showing {gamesToShow.length} result{gamesToShow.length !== 1 ? 's' : ''} for "{searchQuery}"</>
                 ) : (
@@ -125,8 +142,8 @@ function AppContent() {
 
         {/* Games Grid */}
         {gamesToShow.length > 0 ? (
-          <div className="mt-8 flex justify-center">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl">
+          <div className="mt-6 sm:mt-8 flex justify-center px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 w-full max-w-7xl">
               {gamesToShow.map((game) => (
                 <div key={game.id} className="flex justify-center">
                   <GameCard game={game} />
@@ -135,18 +152,29 @@ function AppContent() {
             </div>
           </div>
         ) : activeTab !== 'reviews' ? (
-          <div className="mt-12 text-center space-y-4">
-            <div className="text-6xl">🎮</div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-4 py-2 rounded-lg inline-block">No games found</h3>
-            <p className="text-gray-800 dark:text-gray-200 bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm px-4 py-2 rounded-lg inline-block">
-              Try adjusting your search or browse different categories
+          <div className="mt-8 sm:mt-12 text-center space-y-3 sm:space-y-4 px-4">
+            <div className="text-4xl sm:text-6xl">
+              {activeTab === 'mobile' ? '📱' : '🎮'}
+            </div>
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg inline-block">
+              {activeTab === 'mobile' ? 'New games coming soon!' : 'No games found'}
+            </h3>
+            <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg inline-block max-w-md mx-auto">
+              {activeTab === 'mobile' 
+                ? 'We\'re working on exciting mobile games! Stay tuned for updates.' 
+                : searchQuery 
+                  ? 'Try adjusting your search or browse different categories'
+                  : 'Check back later for new releases'
+              }
             </p>
-            <button
-              onClick={() => setSearchQuery("")}
-              className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white rounded-lg transition-colors duration-200 font-semibold"
-            >
-              Clear Search
-            </button>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="mt-3 sm:mt-4 px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white rounded-lg transition-colors duration-200 font-semibold text-sm sm:text-base"
+              >
+                Clear Search
+              </button>
+            )}
           </div>
         ) : null}
 
