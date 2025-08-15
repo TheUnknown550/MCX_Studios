@@ -4,7 +4,7 @@ import { FaYoutube, FaTiktok, FaGamepad, FaUsers, FaFire, FaChartLine } from "re
 import { games } from "../data/games";
 import { useTheme } from "../contexts/ThemeContext";
 import AnalyticsDashboard from "./AnalyticsDashboard";
-import ThemeToggle from "./ThemeToggle";
+import { analytics } from "../utils/analytics";
 
 const Header: React.FC = () => {
     const { isDark } = useTheme();
@@ -121,10 +121,16 @@ const Header: React.FC = () => {
 
                         {/* Social Links - Mobile */}
                         <div className="flex justify-center space-x-3">
-                            <ThemeToggle />
                             <button
-                                onClick={() => setShowAnalytics(true)}
-                                className="group p-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500 hover:to-purple-500 text-blue-700 hover:text-white transition-all duration-300 border border-blue-300"
+                                onClick={() => {
+                                    setShowAnalytics(true);
+                                    analytics.trackAnalyticsView();
+                                }}
+                                className={`group p-2 rounded-full transition-all duration-300 transform hover:scale-110 ${
+                                    isDark 
+                                        ? 'bg-blue-500/20 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 text-blue-400 hover:text-white border border-blue-400/30' 
+                                        : 'bg-blue-500/10 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 text-blue-700 hover:text-white border border-blue-300'
+                                }`}
                                 title="View Analytics"
                             >
                                 <FaChartLine className="w-4 h-4" />
@@ -133,7 +139,12 @@ const Header: React.FC = () => {
                                 href="https://www.youtube.com/@MCX_Studios24"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group p-2 rounded-full bg-red-500/10 hover:bg-red-500 text-red-700 hover:text-white transition-all duration-300"
+                                onClick={() => analytics.trackSocialClick('youtube')}
+                                className={`group p-2 rounded-full transition-all duration-300 transform hover:scale-110 ${
+                                    isDark 
+                                        ? 'bg-red-500/20 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 text-red-400 hover:text-white border border-red-400/30' 
+                                        : 'bg-red-500/10 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 text-red-700 hover:text-white border border-red-300'
+                                }`}
                                 title="YouTube Channel"
                             >
                                 <FaYoutube className="w-4 h-4" />
@@ -142,6 +153,7 @@ const Header: React.FC = () => {
                                 href="https://www.tiktok.com/@mcx_studios24"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => analytics.trackSocialClick('tiktok')}
                                 className={`group p-2 rounded-full transition-all duration-300 transform hover:scale-110 ${
                                     isDark 
                                         ? 'bg-pink-500/20 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-500 text-pink-400 hover:text-white border border-pink-400/30' 
@@ -203,10 +215,16 @@ const Header: React.FC = () => {
 
                         {/* Social Links & Analytics - Desktop */}
                         <div className="flex items-center space-x-4">
-                            <ThemeToggle />
                             <button
-                                onClick={() => setShowAnalytics(true)}
-                                className="group p-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 hover:from-blue-500 hover:to-purple-500 text-blue-700 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 border border-blue-300"
+                                onClick={() => {
+                                    setShowAnalytics(true);
+                                    analytics.trackAnalyticsView();
+                                }}
+                                className={`group p-3 rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${
+                                    isDark 
+                                        ? 'bg-blue-500/20 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 text-blue-400 hover:text-white border border-blue-400/30' 
+                                        : 'bg-blue-500/10 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 text-blue-700 hover:text-white border border-blue-300'
+                                }`}
                                 title="View Analytics"
                             >
                                 <FaChartLine className="w-5 h-5" />
@@ -215,7 +233,12 @@ const Header: React.FC = () => {
                                 href="https://www.youtube.com/@MCX_Studios24"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group p-3 rounded-full bg-red-500/10 hover:bg-red-500 text-red-700 hover:text-white transition-all duration-300 transform hover:scale-110 hover:-translate-y-1"
+                                onClick={() => analytics.trackSocialClick('youtube')}
+                                className={`group p-3 rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${
+                                    isDark 
+                                        ? 'bg-red-500/20 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 text-red-400 hover:text-white border border-red-400/30' 
+                                        : 'bg-red-500/10 hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 text-red-700 hover:text-white border border-red-300'
+                                }`}
                                 title="YouTube Channel"
                             >
                                 <FaYoutube className="w-5 h-5" />
@@ -224,6 +247,7 @@ const Header: React.FC = () => {
                                 href="https://www.tiktok.com/@mcx_studios24"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => analytics.trackSocialClick('tiktok')}
                                 className={`group p-3 rounded-full transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${
                                     isDark 
                                         ? 'bg-pink-500/20 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-500 text-pink-400 hover:text-white border border-pink-400/30' 

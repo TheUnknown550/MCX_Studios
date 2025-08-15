@@ -3,6 +3,7 @@ import type { GameEntry } from "../data/games";
 import GameStats from "./GameStats";
 import { useNotifications } from "./NotificationSystem";
 import { useTheme } from "../contexts/ThemeContext";
+import { analytics } from "../utils/analytics";
 import { FaPlay, FaHeart, FaShareAlt, FaExternalLinkAlt } from "react-icons/fa";
 
 interface GameCardProps {
@@ -18,6 +19,10 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
   const handlePlay = () => {
     setPlayCount(prev => prev + 1);
+    
+    // Track game play event
+    analytics.trackGamePlay(game.title, game.id);
+    
     addNotification({
       type: 'success',
       title: 'Game Launched!',
@@ -31,6 +36,9 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
     e.stopPropagation();
     const newLikedState = !isLiked;
     setIsLiked(newLikedState);
+    
+    // Track like/unlike event
+    analytics.trackGameLike(game.title, game.id, newLikedState);
     
     if (newLikedState) {
       addNotification({
@@ -50,8 +58,10 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
         text: game.description,
         url: game.link,
       });
+      analytics.trackGameShare(game.title, game.id, 'native_share');
     } else {
       navigator.clipboard.writeText(game.link);
+      analytics.trackGameShare(game.title, game.id, 'clipboard');
       addNotification({
         type: 'info',
         title: 'Link Copied!',

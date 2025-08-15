@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSortedGames } from "./hooks/useSortedGames";
 import { NotificationProvider } from "./components/NotificationSystem";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
@@ -9,6 +9,8 @@ import Tabs from "./components/Tabs";
 import GameCard from "./components/GameCard";
 import ReviewsPage from "./components/ReviewsPage";
 import Header from "./components/Header";
+import ThemeToggle from "./components/ThemeToggle";
+import { analytics, initializeAnalytics } from "./utils/analytics";
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<"recent" | "popular" | "recommended" | "reviews">("recent");
@@ -16,6 +18,26 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const { mostRecent = [], mostPopular = [], recommended = [] } = useSortedGames();
   const { isDark } = useTheme(); // This will force re-render when theme changes
+
+  // Initialize Google Analytics
+  useEffect(() => {
+    initializeAnalytics();
+  }, []);
+
+  // Track tab changes
+  const handleTabChange = (tab: "recent" | "popular" | "recommended" | "reviews") => {
+    setActiveTab(tab);
+    analytics.trackTabChange(tab);
+  };
+
+  // Track search queries
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim()) {
+      const resultsCount = filterGames(gamesToShow).length;
+      analytics.trackSearch(query, resultsCount);
+    }
+  };
 
   // Filter games based on search query
   const filterGames = (games: typeof mostRecent) => {
@@ -64,17 +86,22 @@ function AppContent() {
       {/* Animated Background */}
       <AnimatedBackground />
       
+      {/* Theme Toggle - Fixed Top Right */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      
       {/* Main Content */}
       <div className="relative z-10 p-6">
         <Header />
         
         {/* Search Bar */}
         <div className="mt-8 flex justify-center">
-          <SearchBar onSearch={setSearchQuery} />
+          <SearchBar onSearch={handleSearch} />
         </div>
 
         {/* Navigation Tabs */}
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Tabs activeTab={activeTab} setActiveTab={handleTabChange} />
 
         {/* Content Area */}
         {activeTab === 'reviews' ? (
