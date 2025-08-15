@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCheckCircle, FaExclamationTriangle, FaInfoCircle, FaTimes } from 'react-icons/fa';
+import { useTheme } from '../contexts/ThemeContext';
 
 export type NotificationType = 'success' | 'error' | 'info' | 'warning';
 
@@ -80,6 +81,7 @@ interface NotificationItemProps {
 const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRemove }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     // Trigger entrance animation
@@ -108,14 +110,22 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRem
   const getColors = () => {
     switch (notification.type) {
       case 'success':
-        return 'border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800';
+        return isDark 
+          ? 'border-green-800 bg-green-900/20' 
+          : 'border-green-200 bg-green-50';
       case 'error':
-        return 'border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800';
+        return isDark 
+          ? 'border-red-800 bg-red-900/20' 
+          : 'border-red-200 bg-red-50';
       case 'warning':
-        return 'border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20 dark:border-yellow-800';
+        return isDark 
+          ? 'border-yellow-800 bg-yellow-900/20' 
+          : 'border-yellow-200 bg-yellow-50';
       case 'info':
       default:
-        return 'border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800';
+        return isDark 
+          ? 'border-blue-800 bg-blue-900/20' 
+          : 'border-blue-200 bg-blue-50';
     }
   };
 
@@ -131,16 +141,24 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onRem
         <div className="flex items-start space-x-3">
           {getIcon()}
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-gray-800 dark:text-white">
+            <h4 className={`text-sm font-semibold ${
+              isDark ? 'text-white' : 'text-gray-800'
+            }`}>
               {notification.title}
             </h4>
-            <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+            <p className={`text-xs mt-1 ${
+              isDark ? 'text-gray-300' : 'text-gray-600'
+            }`}>
               {notification.message}
             </p>
           </div>
           <button
             onClick={handleRemove}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            className={`transition-colors ${
+              isDark 
+                ? 'text-gray-400 hover:text-gray-200' 
+                : 'text-gray-400 hover:text-gray-600'
+            }`}
           >
             <FaTimes className="w-4 h-4" />
           </button>

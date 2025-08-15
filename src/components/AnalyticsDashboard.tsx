@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaChartLine, FaUsers, FaGamepad, FaClock, FaTimes } from 'react-icons/fa';
 import { games } from '../data/games';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface AnalyticsDashboardProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface AnalyticsDashboardProps {
 }
 
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose }) => {
+  const { isDark } = useTheme();
+  
   // Calculate real stats from game data
   const totalVisits = games.reduce((sum, game) => sum + (game.visits || 0), 0);
   const estimatedActiveUsers = Math.max(Math.floor(totalVisits / 100), 5);
@@ -52,18 +55,28 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className={`rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto ${
+        isDark ? 'bg-gray-800' : 'bg-white'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className={`flex items-center justify-between p-6 border-b ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <div className="flex items-center space-x-3">
             <FaChartLine className="w-6 h-6 text-blue-500" />
-            <h2 className="text-2xl font-bold text-gray-800">Analytics Dashboard</h2>
+            <h2 className={`text-2xl font-bold ${
+              isDark ? 'text-white' : 'text-gray-800'
+            }`}>Analytics Dashboard</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+            className={`p-2 rounded-full transition-colors ${
+              isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+            }`}
           >
-            <FaTimes className="w-5 h-5 text-gray-500" />
+            <FaTimes className={`w-5 h-5 ${
+              isDark ? 'text-gray-400' : 'text-gray-500'
+            }`} />
           </button>
         </div>
 
@@ -115,8 +128,12 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
         </div>
 
         {/* Chart */}
-        <div className="p-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Visits</h3>
+        <div className={`p-6 border-t ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
+          <h3 className={`text-lg font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-800'
+          }`}>Weekly Visits</h3>
           <div className="flex items-end space-x-4 h-32">
             {chartData.map((data, index) => (
               <div key={data.day} className="flex-1 flex flex-col items-center">
@@ -127,16 +144,24 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
                     animationDelay: `${index * 100}ms`
                   }}
                 ></div>
-                <p className="text-xs text-gray-600 mt-2">{data.day}</p>
-                <p className="text-xs font-semibold text-gray-800">{data.visits}</p>
+                <p className={`text-xs mt-2 ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>{data.day}</p>
+                <p className={`text-xs font-semibold ${
+                  isDark ? 'text-gray-200' : 'text-gray-800'
+                }`}>{data.visits}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Top Performing Game */}
-        <div className="p-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Performing Game</h3>
+        <div className={`p-6 border-t ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
+          <h3 className={`text-lg font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-800'
+          }`}>Top Performing Game</h3>
           <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <div>

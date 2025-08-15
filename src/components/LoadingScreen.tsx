@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaGamepad, FaRocket } from 'react-icons/fa';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -8,6 +9,7 @@ interface LoadingScreenProps {
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
+  const { isDark } = useTheme();
 
   const messages = [
     "🎮 Loading MCX Studios...",
@@ -38,13 +40,19 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   }, [onComplete, messages.length]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center z-50">
+    <div className={`fixed inset-0 flex items-center justify-center z-50 ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-black' 
+        : 'bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600'
+    }`}>
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-30 animate-bounce"
+            className={`absolute w-2 h-2 rounded-full opacity-30 animate-bounce ${
+              isDark ? 'bg-blue-400' : 'bg-white'
+            }`}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -59,7 +67,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       <div className="text-center z-10 max-w-md mx-auto px-6">
         {/* Logo Animation */}
         <div className="mb-8 relative">
-          <div className="inline-block p-6 bg-white/20 backdrop-blur-md rounded-full">
+          <div className={`inline-block p-6 backdrop-blur-md rounded-full ${
+            isDark ? 'bg-gray-800/40' : 'bg-white/20'
+          }`}>
             <FaGamepad className="w-16 h-16 text-white animate-pulse" />
           </div>
           <div className="absolute -top-2 -right-2">
@@ -83,9 +93,15 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-white/20 rounded-full h-3 mb-4 overflow-hidden">
+        <div className={`w-full rounded-full h-3 mb-4 overflow-hidden ${
+          isDark ? 'bg-gray-700/40' : 'bg-white/20'
+        }`}>
           <div 
-            className="h-full bg-gradient-to-r from-yellow-400 to-pink-400 rounded-full transition-all duration-300 ease-out"
+            className={`h-full rounded-full transition-all duration-300 ease-out ${
+              isDark 
+                ? 'bg-gradient-to-r from-blue-400 to-purple-400' 
+                : 'bg-gradient-to-r from-yellow-400 to-pink-400'
+            }`}
             style={{ width: `${progress}%` }}
           />
         </div>

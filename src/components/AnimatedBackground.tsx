@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface Particle {
   x: number;
@@ -11,6 +12,7 @@ interface Particle {
 
 const AnimatedBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -57,7 +59,8 @@ const AnimatedBackground: React.FC = () => {
         // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        const particleColor = isDark ? '255, 255, 255' : '100, 100, 100';
+        ctx.fillStyle = `rgba(${particleColor}, ${particle.opacity})`;
         ctx.fill();
       });
 
@@ -72,7 +75,8 @@ const AnimatedBackground: React.FC = () => {
             ctx.beginPath();
             ctx.moveTo(particle1.x, particle1.y);
             ctx.lineTo(particle2.x, particle2.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 100)})`;
+            const lineColor = isDark ? '255, 255, 255' : '100, 100, 100';
+            ctx.strokeStyle = `rgba(${lineColor}, ${0.1 * (1 - distance / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -87,7 +91,7 @@ const AnimatedBackground: React.FC = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, []);
+  }, [isDark]);
 
   return (
     <canvas

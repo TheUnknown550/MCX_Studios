@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaStar, FaEye, FaCalendarAlt, FaTrophy, FaFire, FaCrown } from 'react-icons/fa';
+import { useTheme } from '../contexts/ThemeContext';
 import RatingModal from './RatingModal';
 
 interface GameStatsProps {
@@ -26,6 +27,7 @@ const GameStats: React.FC<GameStatsProps> = ({
   gameId
 }) => {
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const { isDark } = useTheme();
 
   const formatVisits = (num: number) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -74,7 +76,9 @@ const GameStats: React.FC<GameStatsProps> = ({
       </div>
 
       {/* Stats Row */}
-      <div className="flex items-center justify-between text-sm text-gray-800">
+      <div className={`flex items-center justify-between text-sm ${
+        isDark ? 'text-gray-200' : 'text-gray-800'
+      }`}>
         <div className="flex items-center space-x-4">
           <div className="flex items-center">
             <FaEye className="w-4 h-4 mr-1 text-blue-600" />
@@ -91,17 +95,21 @@ const GameStats: React.FC<GameStatsProps> = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-800 font-medium">Rating:</span>
+            <span className={`text-sm font-medium ${
+              isDark ? 'text-gray-200' : 'text-gray-800'
+            }`}>Rating:</span>
             <div className="flex items-center space-x-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}
                   className={`w-4 h-4 ${
-                    rating >= star ? 'text-yellow-500' : 'text-gray-300'
+                    rating >= star ? 'text-yellow-500' : (isDark ? 'text-gray-600' : 'text-gray-300')
                   }`}
                 />
               ))}
-              <span className="text-sm text-gray-800 font-medium ml-1">
+              <span className={`text-sm font-medium ml-1 ${
+                isDark ? 'text-gray-200' : 'text-gray-800'
+              }`}>
                 {rating}/5 ({totalRatings} reviews)
               </span>
             </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { GameEntry } from "../data/games";
 import GameStats from "./GameStats";
 import { useNotifications } from "./NotificationSystem";
+import { useTheme } from "../contexts/ThemeContext";
 import { FaPlay, FaHeart, FaShareAlt, FaExternalLinkAlt } from "react-icons/fa";
 
 interface GameCardProps {
@@ -13,6 +14,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [playCount, setPlayCount] = useState(0);
   const { addNotification } = useNotifications();
+  const { isDark } = useTheme();
 
   const handlePlay = () => {
     setPlayCount(prev => prev + 1);
@@ -66,9 +68,13 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
   return (
     <div 
-      className="group bg-gradient-to-br from-white to-gray-100 rounded-3xl shadow-lg p-5 max-w-xs w-full
+      className={`group rounded-3xl shadow-lg p-5 max-w-xs w-full
                  transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:rotate-1 cursor-pointer
-                 border border-gray-200/50"
+                 border ${
+                   isDark 
+                     ? 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700/50' 
+                     : 'bg-gradient-to-br from-white to-gray-100 border-gray-200/50'
+                 }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -122,11 +128,15 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
       {/* Content */}
       <div className="space-y-3">
-        <h3 className="text-xl font-semibold text-gray-900 line-clamp-2 leading-tight">
+        <h3 className={`text-xl font-semibold line-clamp-2 leading-tight ${
+          isDark ? 'text-white' : 'text-gray-900'
+        }`}>
           {game.title}
         </h3>
         
-        <p className="text-gray-700 text-sm leading-relaxed line-clamp-3">
+        <p className={`text-sm leading-relaxed line-clamp-3 ${
+          isDark ? 'text-gray-300' : 'text-gray-700'
+        }`}>
           {game.description}
         </p>
 
