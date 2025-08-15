@@ -13,9 +13,7 @@ interface RatingModalProps {
 const RatingModal: React.FC<RatingModalProps> = ({ 
   isOpen, 
   onClose, 
-  gameTitle, 
-  gameId, 
-  currentRating = 0 
+  gameTitle
 }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
