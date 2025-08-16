@@ -40,7 +40,7 @@ export type GameEntry = {
 
 export const games: GameEntry[] = [
   {
-    id: 1,
+    id: 2,
     title: "Escape The Impossible BRAIN ROT OBBY!!!",
     description: "🧠 BRAIN ROT OBBY - Can You Survive the Chaos? Navigate through mind-bending obstacles and prove your skills in this intense parkour challenge!",
     imageUrl: "https://tr.rbxcdn.com/180DAY-e1a8146f5ea1ba6768658e09dd27c4be/150/150/Image/Webp/noFilter",
@@ -48,7 +48,7 @@ export const games: GameEntry[] = [
     platform: "roblox",
     universeId: 7972259029,
     createdAt: "2025-01-07T09:00:00Z",
-    visits: 1247,
+    visits: 597,
     genre: ["Obby", "Parkour", "Challenge"],
     difficulty: "Hard",
     features: ["Checkpoints", "Leaderboard", "Custom Animations"],
@@ -95,15 +95,15 @@ export const games: GameEntry[] = [
     ],
   },
   {
-    id: 2,
+    id: 1,
     title: "Higher Heights",
     description: "How high can you go? Climb to incredible heights in this vertical climbing adventure. Test your endurance and reach for the sky!",
-    imageUrl: "https://tr.rbxcdn.com/180DAY-d14ffe54f0f4e7a04eb780e4ff948fd4/150/150/Image/Webp/noFilter",
+    imageUrl: "https://tr.rbxcdn.com/180DAY-52b121270c819285fcccf13d9e665e23/150/150/Image/Webp/noFilter",
     link: "https://www.roblox.com/games/84024545489993/Higher-Heights",
     platform: "roblox",
     universeId: 8194190200,
     createdAt: "2025-07-22T12:00:00Z",
-    visits: 856,
+    visits: 7,
     genre: ["Climbing", "Adventure", "Simulator"],
     difficulty: "Medium",
     features: ["Height Tracker", "Power-ups", "Weather System"],
