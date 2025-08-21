@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { NotificationProvider } from "./components/NotificationSystem";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import LoadingScreen from "./components/LoadingScreen";
@@ -10,10 +11,11 @@ import GameCard from "./components/GameCard";
 import ReviewsPage from "./components/ReviewsPage";
 import Header from "./components/Header";
 import ThemeToggle from "./components/ThemeToggle";
+import SudokuPrivacy from "./components/SudokuPrivacy";
 import { analytics, initializeAnalytics } from "./utils/analytics";
 import { games } from "./data/games";
 
-function AppContent() {
+function HomePage() {
   const [activeTab, setActiveTab] = useState<TabOption>("roblox");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
   const [searchQuery, setSearchQuery] = useState("");
@@ -195,7 +197,12 @@ export default function App() {
   return (
     <ThemeProvider>
       <NotificationProvider>
-        <AppContent />
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/sudoku-privacy" element={<SudokuPrivacy />} />
+          </Routes>
+        </Router>
       </NotificationProvider>
     </ThemeProvider>
   );
